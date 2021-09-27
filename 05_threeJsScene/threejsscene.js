@@ -1,4 +1,5 @@
 import * as THREE from "../libs/three.js/r131/three.module.js"
+import {addMouseHandler} from "./sceneHandlers.js"
 
 let renderer = null, scene = null, camera = null, cube = null, sphere = null, cone = null, sphereGroup = null;
 
@@ -12,6 +13,9 @@ function main()
     update();
 }
 
+/**
+ * Updates the rotation of the objects in the scene
+ */
 function animate() 
 {
     const now = Date.now();
@@ -27,10 +31,13 @@ function animate()
     sphereGroup.rotation.y -= angle / 2;
     sphere.rotation.x += angle * 2;
 
-    // // Rotate the cone about its X axis (tumble forward)
+    // Rotate the cone about its X axis (tumble forward)
     cone.rotation.z += angle;
 }
 
+/**
+ * Runs the update loop: updates the objects in the scene
+ */
 function update()
 {
     requestAnimationFrame(function() { update(); });
@@ -42,6 +49,10 @@ function update()
     animate();
 }
 
+/**
+ * Creates a basic scene with lights, a camera, and 3 objects
+ * @param {canvas} canvas The canvas element to render on
+ */
 function createScene(canvas)
 {   
     // Create the Three.js renderer and attach it to our canvas

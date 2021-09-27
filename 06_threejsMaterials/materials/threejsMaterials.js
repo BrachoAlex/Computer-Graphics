@@ -1,14 +1,12 @@
-import * as THREE from "../libs/three.js/r131/three.module.js"
+import * as THREE from "../../libs/three.js/r131/three.module.js"
 import {initControls, addMouseHandler} from "./sceneHandlers.js";
 
-let renderer = null, scene = null, camera = null, root = null, group = null, sphere = null, sphereTextured = null;
-
-let materialName = "phong-textured";
+let renderer = null, scene = null, camera = null, group = null, sphere = null, sphereTextured = null;
 
 const  duration = 10000; // ms
 let currentTime = Date.now();
 
-let materials = {}, mapUrl = "../images/moon_1024.jpg", textureMap = null;
+const materials = {}, mapUrl = "../../images/moon_1024.jpg";
 
 function animate() 
 {
@@ -33,16 +31,19 @@ function update()
     animate();
 }
 
-// Unlit (Basic Material) - With this material type, only the textures, colors, and transparency values are used to render the surface of the object. There is no contribution from lights in the scene.
+/**
+* Unlit (Basic Material) - With this material type, only the textures, colors, and transparency values are used to render the surface of the object. There is no contribution from lights in the scene.
+* Phong shading - This material type implements a simple, fairly realistic-looking shading model with high performance. Phong-shaded objects will show brightly lit areas (specular reflections) where light hits directly, will light well along any edges that mostly face the light source, and will darkly shade areas where the edge of the object faces away from the light source.
+* Lambertian reflectance - In Lambert shading, the apparent brightness of the surface to an observer is the same regardless of the observer’s angle of view. 
 
-// Phong shading - This material type implements a simple, fairly realistic-looking shading model with high performance. Phong-shaded objects will show brightly lit areas (specular reflections) where light hits directly, will light well along any edges that mostly face the light source, and will darkly shade areas where the edge of the object faces away from the light source.
-
-// Lambertian reflectance - In Lambert shading, the apparent brightness of the surface to an observer is the same regardless of the observer’s angle of view. 
-function createMaterials()
+* Creates all the materials that can be assigned to the object
+* @param {string} mapUrl The route of the texture to be used
+*/
+function createMaterials(mapUrl)
 {
     // Create a textre phong material for the cube
     // First, create the texture map
-    textureMap = new THREE.TextureLoader().load(mapUrl);
+    const textureMap = new THREE.TextureLoader().load(mapUrl);
 
     materials["basic"] = new THREE.MeshBasicMaterial();
     materials["phong"] = new THREE.MeshPhongMaterial();
@@ -52,29 +53,14 @@ function createMaterials()
     materials["lambert-textured"] = new THREE.MeshLambertMaterial({ map: textureMap });
 }
 
-// Changes the diffuse color of the material. The material’s diffuse color specifies how much the object reflects lighting sources that cast rays in a direction — directional, point, and spotlights.
-function setMaterialDiffuse(color)
-{    
-    materials["basic"].color.set(color)
-    materials["phong"].color.set(color)
-    materials["lambert"].color.set(color)
-    materials["basic-textured"].color.set(color)
-    materials["phong-textured"].color.set(color)
-    materials["lambert-textured"].color.set(color)
-}
-
-// The specular color combines with scene lights to create reflected highlights from any of the object's vertices facing toward light sources.
-function setMaterialSpecular(color)
-{    
-    materials["phong"].specular.set(color);
-    materials["phong-textured"].specular.set(color);
-}
-
+/*
+* Changes the material of the mesh to the specified on based on its name
+* @param {string} name The name of the key from the materials dictionary
+*/
 function setMaterial(name)
 {
     const textureOn = document.querySelector("#textureCheckbox").checked;
-    materialName = name;
-
+    
     if (textureOn)
     {
         sphere.visible = false;
@@ -89,6 +75,10 @@ function setMaterial(name)
     }
 }
 
+/**
+ * Creates a scene, camera, and adds lights and a sphere mesh
+ * @param {canvas} canvas 
+ */
 function createScene(canvas) 
 {    
     // Create the Three.js renderer and attach it to our canvas
@@ -105,38 +95,30 @@ function createScene(canvas)
     // Add  a camera so we can view the scene
     camera = new THREE.PerspectiveCamera( 45, canvas.width / canvas.height, 1, 4000 );
     camera.position.z = 10;
-    scene.add(camera);
-    
-    // Create a group to hold all the objects
-    root = new THREE.Object3D;
-    
+        
+    // Create a group to hold the sphere
+    group = new THREE.Object3D;
+
     // Add a directional light to show off the object
-    let light = new THREE.DirectionalLight( 0xffffff, 1);
+    const directionalLight = new THREE.DirectionalLight( 0xffffff, 1);
 
     // Position the light out from the scene, pointing at the origin
-    light.position.set(.5, 0, 1);
-    root.add( light );
+    directionalLight.position.set(.5, 0, 1);
+    scene.add( directionalLight );
 
-    light = new THREE.AmbientLight ( 0xaaccbb, 0.3 );
-    root.add(light);
+    const ambientLight = new THREE.AmbientLight ( 0xaaccbb, 0.3 );
+    scene.add(ambientLight);
     
-    // Create a group to hold the spheres
-    group = new THREE.Object3D;
-    root.add(group);
-
     // Create all the materials
-    createMaterials();
+    createMaterials(mapUrl);
     
     // Create the sphere geometry
-    let geometry = new THREE.SphereGeometry(2, 20, 20);
+    const geometry = new THREE.SphereGeometry(2, 20, 20);
     
     // And put the geometry and material together into a mesh
     sphere = new THREE.Mesh(geometry, materials["phong"]);
     sphere.visible = false;
-
-    // Create the sphere geometry
-    geometry = new THREE.SphereGeometry(2, 20, 20);
-
+        
     // And put the geometry and material together into a mesh
     sphereTextured = new THREE.Mesh(geometry, materials["phong-textured"]);
     sphereTextured.visible = true;
@@ -145,12 +127,11 @@ function createScene(canvas)
     // Add the sphere mesh to our group
     group.add( sphere );
     group.add( sphereTextured );
-
-    // Now add the group to our scene
-    scene.add( root );
-
-    // add mouse handling so we can rotate the scene
-    addMouseHandler(canvas, root);
+    
+    // add mouse handling so we can rotate the elements in the scene
+    addMouseHandler(canvas, group);
+    
+    scene.add(group);
 }    
 
 function main()

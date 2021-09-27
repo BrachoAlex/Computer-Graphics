@@ -1,5 +1,4 @@
-let mouseDown = false,
-pageX = 0;
+let mouseDown = false, pageX = 0;
 
 function rotateScene(deltax, group)
 {
@@ -40,6 +39,11 @@ function onMouseUp(evt)
     mouseDown = false;
 }
 
+/**
+ * Adds the mouse events to the canvas
+ * @param {canvas} canvas The canvas element to add the mouse handlers to
+ * @param {THREE.Object3D} group The group that is affected by the inputs
+ */
 function addMouseHandler(canvas, group)
 {
     canvas.addEventListener( 'mousemove', e => onMouseMove(e, group), false );
@@ -48,3 +52,5 @@ function addMouseHandler(canvas, group)
 
     document.querySelector("#slider").oninput = (e) => scaleScene(e.target.value, group);
 }
+
+export {addMouseHandler};
