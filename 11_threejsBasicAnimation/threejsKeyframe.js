@@ -1,34 +1,20 @@
-import * as THREE from '../libs/three.js/r125/three.module.js'
-import {OrbitControls} from '../libs/three.js/r125/controls/OrbitControls.js'
+import * as THREE from '../libs/three.js/r131/three.module.js'
+import {OrbitControls} from '../libs/three.js/r131/controls/OrbitControls.js'
+import { GUI } from "../../libs/three.js/r131/libs/dat.gui.module.js"
 
-let renderer = null, 
-scene = null, 
-camera = null,
-root = null,
-group = null,
-cube = null,
-waves = null,
-directionalLight = null,
-orbitControls = null,
-ambientLight = null;
+let renderer = null, scene = null, camera = null,root = null, group = null, cube = null, waves = null, directionalLight = null, orbitControls = null, ambientLight = null;
 
 let duration = 10, // sec
-crateAnimator = null,
-waveAnimator = null,
-lightAnimator = null,
-waterAnimator = null,
-animateCrate = true,
-animateWaves = true,
-animateLight = true,
-animateWater = true,
-loopAnimation = false;
+crateAnimator = null, waveAnimator = null, lightAnimator = null, waterAnimator = null,  animateCrate = true, animateWaves = true, animateLight = true, animateWater = true, loopAnimation = false;
+
+let settings = {};
 
 const waterMapUrl = "../images/water_texture.jpg";
 const createMapUrl = "../images/wooden_crate_1.jpg";
 
-function run()
+function update()
 {
-    requestAnimationFrame(function() { run(); });
+    requestAnimationFrame(function() { update(); });
     
     // Render the scene
     renderer.render( scene, camera );
@@ -38,6 +24,47 @@ function run()
 
     // Update the camera controller
     orbitControls.update();
+}
+
+function createPanel()
+{
+    const panel = new GUI({width:400});
+
+    settings = {
+        'Duration': 10,
+        'Animate Crate': true,
+        'Animate Waves': true,
+        'Animate Light': true,
+        'Animate Water': true,
+        'Loop Animation': false,
+        'Play': playAnimations
+    };
+
+    panel.add(settings,'Duration', 0, 10, 1).onChange((delta)=>{
+        duration = delta;
+        playAnimations();
+    });
+    panel.add(settings,'Animate Crate').onChange((delta)=>{
+        animateCrate = delta;
+        playAnimations();
+    });
+    panel.add(settings,'Animate Waves').onChange((delta)=>{
+        animateWaves = delta;
+        playAnimations();
+    });
+    panel.add(settings,'Animate Light').onChange((delta)=>{
+        animateLight = delta;
+        playAnimations();
+    });
+    panel.add(settings,'Animate Water').onChange((delta)=>{
+        animateWater = delta;
+        playAnimations();
+    });
+    panel.add(settings,'Loop Animation').onChange((delta)=>{
+        loopAnimation = delta;
+        playAnimations();
+    });
+    panel.add(settings, 'Play');
 }
 
 function createScene(canvas) 
@@ -240,48 +267,37 @@ function playAnimations()
 
 }
 
-function initControls()
+function resize()
 {
-    document.querySelector("#animateCrateCheckbox").addEventListener('change', () => {
-        animateCrate = !animateCrate;
-        playAnimations();
-    } );
+    const canvas = document.getElementById("webglcanvas");
 
-    document.querySelector("#animateWavesCheckbox").addEventListener('change', () => {
-        animateWaves = !animateWaves;
-        playAnimations();
-     } );
-    document.querySelector("#animateLightCheckbox").addEventListener('change', () => {
-        animateLight = !animateLight;
-        playAnimations();
-    } );
-    document.querySelector("#animateWaterCheckbox").addEventListener('change', () => {
-        animateWater = !animateWater;
-        playAnimations();
-    } );
-    document.querySelector("#loopCheckbox").addEventListener('change', () => {
-        loopAnimation = !loopAnimation;
-        playAnimations();
-    } );
-    document.querySelector("#durationSlider").oninput = (e) => {
-        duration = e.target.value;
-        document.querySelector('#durationValue').innerHTML = duration + 's';
-        playAnimations();
-    };
+    canvas.width = document.body.clientWidth;
+    canvas.height = document.body.clientHeight;
+
+    camera.aspect = canvas.width / canvas.height;
+
+    camera.updateProjectionMatrix();
+    renderer.setSize(canvas.width, canvas.height);
 }
 
-window.onload = ()=>{
+function main()
+{
     const canvas = document.getElementById("webglcanvas");
 
     // create the scene
     createScene(canvas);
 
     // initialize the controls
-    initControls();
+    createPanel();
     
     // create the animations
     playAnimations();
     
-    // Run the run loop
-    run();
+    // update the update loop
+    update();
 }
+
+window.addEventListener('resize', resize, false);
+
+main();
+resize();

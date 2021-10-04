@@ -1,12 +1,12 @@
-import * as THREE from '../libs/three.js/r125/three.module.js'
+import * as THREE from '../libs/three.js/r131/three.module.js'
 
 let renderer = null, scene = null, camera = null, directionalLight = null, group = null, cube = null;
 
 let animator = null, duration = 10000, loopAnimation = false;
 
-function run() 
+function update() 
 {
-    requestAnimationFrame(function() { run(); });
+    requestAnimationFrame(function() { update(); });
 
     // Render the scene
     renderer.render( scene, camera );
@@ -99,6 +99,6 @@ window.onload=()=>
     // create the animations
     playAnimations();
     
-    // Run the run loop
-    run();
+    // update the update loop
+    update();
 }

@@ -1,5 +1,5 @@
-import * as THREE from '/libs/three.js/r125/three.module.js'
-import { OrbitControls } from '/libs/three.js/r125/controls/OrbitControls.js';
+import * as THREE from '/libs/three.js/r131/three.module.js'
+import { OrbitControls } from '/libs/three.js/r131/controls/OrbitControls.js';
 
 class BaseScene
 {
@@ -78,7 +78,8 @@ class BaseScene
         this.renderer.setSize(canvas.width, canvas.height);
     }
 
-    update(delta) {};
+    update(delta) 
+    {    };
 
 }
 

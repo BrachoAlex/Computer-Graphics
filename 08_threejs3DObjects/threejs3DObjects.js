@@ -3,25 +3,17 @@
 // Both the THREE.DirectionalLight type and the THREE.SpotLight type support shadows. 
 // 3. Indicate which geometry objects cast and receive shadows.
 
-import * as THREE from '../libs/three.js/r125/three.module.js'
-import { OrbitControls } from '../libs/three.js/r125/controls/OrbitControls.js';
-import { OBJLoader } from '../libs/three.js/r125/loaders/OBJLoader.js';
-import { MTLLoader } from '../libs/three.js/r125/loaders/MTLLoader.js';
+import * as THREE from '../libs/three.js/r131/three.module.js'
+import { OrbitControls } from '../libs/three.js/r131/controls/OrbitControls.js';
+import { OBJLoader } from '../libs/three.js/r131/loaders/OBJLoader.js';
+import { MTLLoader } from '../libs/three.js/r131/loaders/MTLLoader.js';
 
-let renderer = null, 
-scene = null, 
-camera = null,
-root = null,
-group = null,
-objectList = [],
-orbitControls = null;
+let renderer = null, scene = null, camera = null, group = null, objectList = [], orbitControls = null;
 
 let duration = 20000; // ms
 let currentTime = Date.now();
 
-let directionalLight = null;
-let spotLight = null;
-let ambientLight = null;
+let directionalLight = null, spotLight = null, ambientLight = null;
 
 let mapUrl = "../images/checker_large.gif";
 
@@ -46,8 +38,8 @@ function main()
 
 function onError ( err ){ console.error( err ); };
 
-function onProgress( xhr ) {
-
+function onProgress( xhr ) 
+{
     if ( xhr.lengthComputable ) {
 
         const percentComplete = xhr.loaded / xhr.total * 100;
@@ -57,9 +49,8 @@ function onProgress( xhr ) {
 
 async function loadJson(url, objectList)
 {
-    // const jsonPromiseLoader = promisifyLoader(new THREE.ObjectLoader());
-    
-    try {
+    try 
+    {
         const object = await new THREE.ObjectLoader().loadAsync(url, onProgress, onError);
 
         object.castShadow = true;
@@ -70,14 +61,16 @@ async function loadJson(url, objectList)
         objectList.push(object);
         scene.add(object);
     }
-    catch (err) {
+    catch (err) 
+    {
         return onError(err);
     }
 }
 
 async function loadObj(objModelUrl, objectList)
 {
-    try {
+    try
+    {
         const object = await new OBJLoader().loadAsync(objModelUrl.obj, onProgress, onError);
         let texture = objModelUrl.hasOwnProperty('normalMap') ? new THREE.TextureLoader().load(objModelUrl.map) : null;
         let normalMap = objModelUrl.hasOwnProperty('normalMap') ? new THREE.TextureLoader().load(objModelUrl.normalMap) : null;
@@ -85,7 +78,8 @@ async function loadObj(objModelUrl, objectList)
 
         console.log(object);
         
-        object.traverse(function (child) {
+        object.traverse(function (child) 
+        {
             if (child.isMesh) {
                 child.castShadow = true;
                 child.receiveShadow = true;
@@ -104,7 +98,8 @@ async function loadObj(objModelUrl, objectList)
         scene.add(object);
 
     }
-    catch (err) {
+    catch (err) 
+    {
         onError(err);
     }
 }
@@ -122,6 +117,7 @@ async function loadObjMtl(objModelUrl, objectList)
         const objLoader = new OBJLoader();
 
         objLoader.setMaterials(materials);
+
         const object = await objLoader.loadAsync(objModelUrl.obj, onProgress, onError);
     
         object.traverse(function (child) {
@@ -137,7 +133,8 @@ async function loadObjMtl(objModelUrl, objectList)
         objectList.push(object);
         scene.add(object);
     }
-    catch (err){
+    catch (err)
+    {
         onError(err);
     }
 }
@@ -211,13 +208,9 @@ function createScene(canvas)
     // Add  a camera so we can view the scene
     camera = new THREE.PerspectiveCamera( 45, canvas.width / canvas.height, 1, 4000 );
     camera.position.set(-2, 6, 12);
-    scene.add(camera);
 
     orbitControls = new OrbitControls(camera, renderer.domElement);
-    
-    // Create a group to hold all the objects
-    root = new THREE.Object3D;
-    
+        
     // Add a directional light to show off the object
     directionalLight = new THREE.DirectionalLight( 0xaaaaaa, 1);
 
@@ -225,12 +218,12 @@ function createScene(canvas)
     directionalLight.position.set(.5, 1, -3);
     directionalLight.target.position.set(0,0,0);
     directionalLight.castShadow = true;
-    root.add(directionalLight);
+    scene.add(directionalLight);
 
     spotLight = new THREE.SpotLight (0xaaaaaa);
     spotLight.position.set(2, 8, 15);
     spotLight.target.position.set(-2, 0, -2);
-    root.add(spotLight);
+    scene.add(spotLight);
 
     spotLight.castShadow = true;
 
@@ -242,7 +235,7 @@ function createScene(canvas)
     spotLight.shadow.mapSize.height = SHADOW_MAP_HEIGHT;
 
     ambientLight = new THREE.AmbientLight ( 0x444444, 0.8);
-    root.add(ambientLight);
+    scene.add(ambientLight);
     
     // Create the objects
     loadObj(objModelUrl, objectList);
@@ -253,10 +246,10 @@ function createScene(canvas)
 
     // Create a group to hold the objects
     group = new THREE.Object3D;
-    root.add(group);
+    scene.add(group);
 
     // Create a texture map
-    let map = new THREE.TextureLoader().load(mapUrl);
+    const map = new THREE.TextureLoader().load(mapUrl);
     map.wrapS = map.wrapT = THREE.RepeatWrapping;
     map.repeat.set(8, 8);
 
@@ -277,8 +270,6 @@ function createScene(canvas)
     mesh.castShadow = false;
     mesh.receiveShadow = true;    
     group.add( mesh );
-    
-    scene.add( root );
 }
 
-window.onload = () => main();
+main();
