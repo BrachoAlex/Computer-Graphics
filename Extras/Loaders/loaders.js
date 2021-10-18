@@ -1,9 +1,9 @@
-import * as THREE from '../../libs/three.js/r125/three.module.js'
-import { OrbitControls } from '../../libs/three.js/r125/controls/OrbitControls.js';
-import { OBJLoader } from '../../libs/three.js/r125/loaders/OBJLoader.js';
-import { MTLLoader } from '../../libs/three.js/r125/loaders/MTLLoader.js';
-import { FBXLoader } from '../../libs/three.js/r125/loaders/FBXLoader.js';
-import { GLTFLoader } from '../../libs/three.js/r125/loaders/GLTFLoader.js'
+import * as THREE from '../../libs/three.js/r131/three.module.js'
+import { OrbitControls } from '../../libs/three.js/r131/controls/OrbitControls.js';
+import { OBJLoader } from '../../libs/three.js/r131/loaders/OBJLoader.js';
+import { MTLLoader } from '../../libs/three.js/r131/loaders/MTLLoader.js';
+import { FBXLoader } from '../../libs/three.js/r131/loaders/FBXLoader.js';
+import { GLTFLoader } from '../../libs/three.js/r131/loaders/GLTFLoader.js'
 
 let renderer = null, scene = null, camera = null, root = null, orbitControls = null;
 
@@ -213,14 +213,13 @@ function createScene(canvas)
 
 function loadObjects()
 {
-    // loadObj(objModel, {position: new THREE.Vector3(-8, 0, 0), scale: new THREE.Vector3(3, 3, 3), rotation: new THREE.Vector3(0, 1.58, 0) });
+    loadObj(objModel, {position: new THREE.Vector3(-8, 0, 0), scale: new THREE.Vector3(3, 3, 3), rotation: new THREE.Vector3(0, 1.58, 0) });
     
-    // load3dModel(objMtlModel.obj, objMtlModel.mtl, {position: new THREE.Vector3(0, -3, 0), scale:new THREE.Vector3(0.25, 0.25, 0.25)});
+    load3dModel(objMtlModel.obj, objMtlModel.mtl, {position: new THREE.Vector3(0, -3, 0), scale:new THREE.Vector3(0.25, 0.25, 0.25)});
     
-    loadGLTF('../../models/gltf/equipo1_IntroductionMapDup.glb', {position: new THREE.Vector3(0, -2, 0), scale:new THREE.Vector3(5, 5, 5), rotation: new THREE.Vector3(0,0,0)  });
-    // loadGLTF('../../models/gltf/Soldier.glb', {position: new THREE.Vector3(10, -4, 0), scale:new THREE.Vector3(0.05, 0.05, 0.05), rotation: new THREE.Vector3(1.58, 3.1415,0)  });
+    loadGLTF('../../models/gltf/Soldier.glb', {position: new THREE.Vector3(10, -4, 0), scale:new THREE.Vector3(5, 5, 5), rotation: new THREE.Vector3(0, 3.1415,0)  });
 
-    // loadFBX('../../models/fbx/Robot/robot_idle.fbx', {position: new THREE.Vector3(0, -4, -20), scale:new THREE.Vector3(0.05, 0.05, 0.05) })
+    loadFBX('../../models/fbx/Robot/robot_idle.fbx', {position: new THREE.Vector3(0, -4, -20), scale:new THREE.Vector3(0.05, 0.05, 0.05) })
 }
 
 function main()
