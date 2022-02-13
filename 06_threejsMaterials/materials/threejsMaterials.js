@@ -1,4 +1,6 @@
-import * as THREE from "../../libs/three.js/r131/three.module.js"
+"use strict"; 
+
+import * as THREE from "../../libs/three.js/three.module.js"
 import {initControls, addMouseHandler} from "./sceneHandlers.js";
 
 let renderer = null, scene = null, camera = null, group = null, sphere = null, sphereTextured = null;

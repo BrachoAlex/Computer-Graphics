@@ -1,7 +1,6 @@
-import * as THREE from '../../libs/three.js/r125/three.module.js'
-import {BaseScene} from '/common/baseScene.js'
+import {BaseScene} from './../../common/baseScene.js'
 import {Particle, ParticleSystem} from './particleSystem.js'
-import Stats from '/libs/three.js/r125/libs/stats.module.js'
+import Stats from '/libs/three.js/libs/stats.module.js'
 
 let stats = null;
 let smoke = null;

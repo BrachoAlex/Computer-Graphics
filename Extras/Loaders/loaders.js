@@ -1,13 +1,20 @@
-import * as THREE from '../../libs/three.js/r131/three.module.js'
-import { OrbitControls } from '../../libs/three.js/r131/controls/OrbitControls.js';
-import { OBJLoader } from '../../libs/three.js/r131/loaders/OBJLoader.js';
-import { MTLLoader } from '../../libs/three.js/r131/loaders/MTLLoader.js';
-import { FBXLoader } from '../../libs/three.js/r131/loaders/FBXLoader.js';
-import { GLTFLoader } from '../../libs/three.js/r131/loaders/GLTFLoader.js'
+import * as THREE from '../../libs/three.js/three.module.js'
+import { OrbitControls } from '../../libs/three.js/controls/OrbitControls.js';
+import { OBJLoader } from '../../libs/three.js/loaders/OBJLoader.js';
+import { MTLLoader } from '../../libs/three.js/loaders/MTLLoader.js';
+import { FBXLoader } from '../../libs/three.js/loaders/FBXLoader.js';
+import { GLTFLoader } from '../../libs/three.js/loaders/GLTFLoader.js';
+import { KTX2Loader } from '../../libs/three.js/loaders/KTX2Loader.js';
+import { DRACOLoader } from '../../libs/three.js/loaders/DRACOLoader.js';
+import { MeshoptDecoder } from '../../libs/three.js/libs/meshopt_decoder.module.js';
 
-let renderer = null, scene = null, camera = null, root = null, orbitControls = null;
+const MANAGER = new THREE.LoadingManager();
+const DRACO_LOADER = new DRACOLoader( MANAGER ).setDecoderPath("../../libs/three.js/libs/draco/gltf");
+const KTX2_LOADER = new KTX2Loader( MANAGER ).setTranscoderPath("../../libs/three.js/libs/basis/" );
 
+let renderer = null, scene = null, camera = null, root = null, orbitControls = null, pmremGenerator  = null;
 let directionalLight = null, spotLight = null, ambientLight = null;
+let textureEncoding = 'sRGB';
 
 const mapUrl = "../../images/checker_large.gif";
 
@@ -127,11 +134,11 @@ async function loadGLTF(gltfModelUrl, configuration)
 {
     try
     {
-        const gltfLoader = new GLTFLoader();
+        const gltfLoader = new GLTFLoader(MANAGER).setDRACOLoader(DRACO_LOADER).setKTX2Loader(KTX2_LOADER.detectSupport( renderer )).setMeshoptDecoder( MeshoptDecoder );
 
         const result = await gltfLoader.loadAsync(gltfModelUrl);
 
-        const object = result.scene;
+        const object = result.scene || result.scenes[0];
 
         console.log(object);
 
@@ -139,13 +146,36 @@ async function loadGLTF(gltfModelUrl, configuration)
         setVectorValue(object.scale, configuration, 'scale', new THREE.Vector3(1, 1, 1));
         setVectorValue(object.rotation, configuration, 'rotation', new THREE.Vector3(0,0,0));
         
-        scene.add(object);       
+        updateTextureEncoding(object); 
+        scene.add(object);      
     }
     catch(err)
     {
         console.error(err);
     }
 }
+
+function updateTextureEncoding (object) 
+{
+    const encoding = textureEncoding === 'sRGB'
+      ? THREE.sRGBEncoding
+      : THREE.LinearEncoding;
+    traverseMaterials(object, (material) => {
+      if (material.map) material.map.encoding = encoding;
+      if (material.emissiveMap) material.emissiveMap.encoding = encoding;
+      if (material.map || material.emissiveMap) material.needsUpdate = true;
+    });
+}
+
+function traverseMaterials (object, callback) {
+    object.traverse((node) => {
+      if (!node.isMesh) return;
+      const materials = Array.isArray(node.material)
+        ? node.material
+        : [node.material];
+      materials.forEach(callback);
+    });
+  }
 
 function update() 
 {
@@ -161,18 +191,25 @@ function update()
 function createScene(canvas) 
 {
     // Create the Three.js renderer and attach it to our canvas
-    renderer = new THREE.WebGLRenderer( { canvas: canvas, antialias: true } );
+    renderer = new THREE.WebGLRenderer( { canvas: canvas, antialias: true, alpha: true } );
 
     // Set the viewport size
     renderer.setSize(canvas.width, canvas.height);
     
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.setClearColor( 0xffffff );
+    renderer.setPixelRatio( window.devicePixelRatio );
     // Create a new Three.js scene
     scene = new THREE.Scene();
 
+    scene.background = new THREE.Color("black");
     // Add  a camera so we can view the scene
     camera = new THREE.PerspectiveCamera( 45, canvas.width / canvas.height, 1, 4000 );
     camera.position.set(0, 5, 50);
     scene.add(camera);
+
+    pmremGenerator = new THREE.PMREMGenerator( renderer );
+    pmremGenerator.compileEquirectangularShader();
 
     orbitControls = new OrbitControls(camera, renderer.domElement);
     orbitControls.target.set(0,0,0);
@@ -217,6 +254,8 @@ function loadObjects()
     
     load3dModel(objMtlModel.obj, objMtlModel.mtl, {position: new THREE.Vector3(0, -3, 0), scale:new THREE.Vector3(0.25, 0.25, 0.25)});
     
+    loadGLTF('../../models/gltf/SpaceShip/ship.glb', {position: new THREE.Vector3(-10, 10, 0), scale:new THREE.Vector3(1, 1, 1), rotation: new THREE.Vector3(0, 3.1415,0)  });
+
     loadGLTF('../../models/gltf/Soldier.glb', {position: new THREE.Vector3(10, -4, 0), scale:new THREE.Vector3(5, 5, 5), rotation: new THREE.Vector3(0, 3.1415,0)  });
 
     loadFBX('../../models/fbx/Robot/robot_idle.fbx', {position: new THREE.Vector3(0, -4, -20), scale:new THREE.Vector3(0.05, 0.05, 0.05) })

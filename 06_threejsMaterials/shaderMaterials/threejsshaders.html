@@ -24,16 +24,16 @@ void main( void )
 	sampler - specifies the sampler to which the texture from which texels will be retrieved is bound.
 	coord - specifies the texture coordinates at which texture will be sampled.
 	*/
-	vec4 noise = texture2D( noiseTexture, texCoord );
+	vec4 noise = texture( noiseTexture, texCoord );
 	
-	vec2 translation = texCoord + vec2( -1, 1 ) * time * 0.2; 
+	vec2 translation = texCoord + vec2( -1.0, 1.0 ) * time * 0.2; 
 	
-	translation.x += noise.b;
+	translation.x += noise.r;
 	translation.y -= noise.g;
 	
-	vec4 color = texture2D( glowTexture, translation );
+	vec4 color = texture( glowTexture, translation );
 
-	vec4 newColor = vec4(color.r, color.g, color.b, 0.6);
+	vec4 newColor = vec4(color.r, color.g, color.b, 0.8);
 	
 	gl_FragColor = newColor;
 }

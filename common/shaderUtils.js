@@ -1,3 +1,5 @@
+"use strict";
+
 function createShader(gl, str, type)
 {
     let shader = null;

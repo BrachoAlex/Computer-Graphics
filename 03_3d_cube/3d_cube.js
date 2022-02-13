@@ -1,3 +1,5 @@
+"use strict";
+
 import * as shaderUtils from '../common/shaderUtils.js'
 const mat4 = glMatrix.mat4;
 

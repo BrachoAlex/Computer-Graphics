@@ -36,23 +36,23 @@ function main()
     drawRect(ctx, 'rgba(0, 0, 200, 1.0)', 120, 10, 150, 150)
     drawRect(ctx, 'rgba(150, 0, 200, 0.5)', 195, 85, 150, 150)
 
-    ctx.fillStyle = 'rgba(0, 0, 0, 1.0)';
-    ctx.fillRect(25, 250, 100, 100);
-    ctx.clearRect(45, 275, 60, 60);
-    ctx.strokeRect(50, 280, 50, 50);
+    // ctx.fillStyle = 'rgba(0, 0, 0, 1.0)';
+    // ctx.fillRect(25, 250, 100, 100);
+    // ctx.clearRect(45, 275, 60, 60);
+    // ctx.strokeRect(50, 280, 50, 50);
 
-    // Paths - A path is a list of points, connected by segments of lines that can be of different shapes, curved or not, of different width and of different color. A path, or even a subpath, can be closed.
-    ctx.fillStyle = 'rgba(200, 50, 100, 1.0)';
-    ctx.beginPath(); // Creates a new path. Once created, future drawing commands are directed into the path and used to build the path up.
-    ctx.moveTo(500, 50); // Moves the pen to the coordinates specified by x and y.
-    ctx.lineTo(600, 75);
-    ctx.lineTo(600, 25);
-    ctx.fill();
+    // // Paths - A path is a list of points, connected by segments of lines that can be of different shapes, curved or not, of different width and of different color. A path, or even a subpath, can be closed.
+    // ctx.fillStyle = 'rgba(200, 50, 100, 1.0)';
+    // ctx.beginPath(); // Creates a new path. Once created, future drawing commands are directed into the path and used to build the path up.
+    // ctx.moveTo(500, 50); // Moves the pen to the coordinates specified by x and y.
+    // ctx.lineTo(600, 75);
+    // ctx.lineTo(600, 25);
+    // ctx.fill();
 
-    ctx.beginPath();
-    ctx.fillStyle = 'rgba(120, 255, 0, 1.0)';
-    ctx.arc(650, 200, 75, 0, Math.PI * 2, true); // Outer circle
-    ctx.fill();
+    // ctx.beginPath();
+    // ctx.fillStyle = 'rgba(120, 255, 0, 1.0)';
+    // ctx.arc(650, 200, 75, 0, Math.PI * 2, true); // Outer circle
+    // ctx.fill();
 
-    drawFace(ctx, 500, 300);
+    // drawFace(ctx, 500, 300);
 }

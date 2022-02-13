@@ -1,6 +1,8 @@
 // https://threejs.org/docs/index.html#api/en/materials/ShaderMaterial
 
-import * as THREE from "../../libs/three.js/r131/three.module.js";
+"use strict";
+
+import * as THREE from "../../libs/three.js/three.module.js";
 import { addMouseHandler} from "./sceneHandler.js";
 
 let renderer = null, scene = null, camera = null, cubeGroup = null, cube = null, sphereGroup = null, sphere = null, cone = null, uniforms = null;

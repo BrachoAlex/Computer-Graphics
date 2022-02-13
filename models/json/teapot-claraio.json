@@ -23,4 +23,4 @@
                 "groups":[{"start":0,"materialIndex":0,
                 "count":2976}]}}
             ],
-            "materials":[{"uuid":"7AAB18E5-FF88-4A82-8018-4DF34EDB7539","type":"MeshPhongMaterial","color":16714940,"ambient":16714940,"emissive":0,"specular":0,"shininess":50,"opacity":1,"transparent":false,"wireframe":false}],"object":{"uuid":"0D4F494E-35AD-4D5B-9696-7DF60B73E7F0","name":"Teapot001","type":"Mesh","geometry":"2E76BD82-D455-4BFA-AE2A-2670B75F0CC4","material":"7AAB18E5-FF88-4A82-8018-4DF34EDB7539","castShadow":true,"receiveShadow":true,"matrix":[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]}}
+            "materials":[{"uuid":"7AAB18E5-FF88-4A82-8018-4DF34EDB7539","type":"MeshPhongMaterial","color":16714940,"ambient":16714940,"emissive":0,"specular":10,"shininess":1500,"opacity":1.0,"transparent":false,"wireframe":false}],"object":{"uuid":"0D4F494E-35AD-4D5B-9696-7DF60B73E7F0","name":"Teapot001","type":"Mesh","geometry":"2E76BD82-D455-4BFA-AE2A-2670B75F0CC4","material":"7AAB18E5-FF88-4A82-8018-4DF34EDB7539","castShadow":true,"receiveShadow":true,"matrix":[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]}}

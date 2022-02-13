@@ -1,4 +1,4 @@
-import * as THREE from '/libs/three.js/r125/three.module.js'
+import * as THREE from '/libs/three.js/three.module.js'
 
 function copy(x) {
     return JSON.parse( JSON.stringify(x) );

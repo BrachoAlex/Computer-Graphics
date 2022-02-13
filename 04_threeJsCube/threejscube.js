@@ -1,7 +1,10 @@
 // Three js documentation
+// https://threejs.org/manual/
 // https://threejs.org/docs/index.html#manual/introduction/Creating-a-scene
 
-import * as THREE from "../libs/three.js/r131/three.module.js"
+"use strict";
+
+import * as THREE from "../libs/three.js/three.module.js"
 
 let renderer = null,    // Object in charge of drawing a scene
 scene = null,           // Top-level object in the Three.js graphics hierarchy. Three js contains all

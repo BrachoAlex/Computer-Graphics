@@ -1,3 +1,5 @@
+"use strict";
+
 import * as shaderUtils from "../common/shaderUtils.js";
 
 const mat4 = glMatrix.mat4;
@@ -188,5 +190,4 @@ function draw(gl, shaderProgram, obj)
     gl.drawArrays(obj.primtype, 0, obj.nVerts);
 }
 
-window.onload = main;
-// main();
+main();

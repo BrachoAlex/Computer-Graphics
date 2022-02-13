@@ -1,10 +1,10 @@
-import * as THREE from '../../libs/three.js/r125/three.module.js'
-import {GUI} from '../../libs/three.js/r125/libs/dat.gui.module.js'
-import {EffectComposer} from '../../libs/three.js/r125/postProcessing/EffectComposer.js'
-import {RenderPass} from '../../libs/three.js/r125/postProcessing/RenderPass.js'
-import {UnrealBloomPass} from '../../libs/three.js/r125/postProcessing/UnrealBloomPass.js'
-import {ShaderPass} from '../../libs/three.js/r125/postProcessing/ShaderPass.js'
-import {OrbitControls} from '../../libs/three.js/r125/controls/OrbitControls.js'
+import * as THREE from '../../libs/three.js/three.module.js'
+import {GUI} from '../../libs/three.js/libs/dat.gui.module.js'
+import {EffectComposer} from '../../libs/three.js/postProcessing/EffectComposer.js'
+import {RenderPass} from '../../libs/three.js/postProcessing/RenderPass.js'
+import {UnrealBloomPass} from '../../libs/three.js/postProcessing/UnrealBloomPass.js'
+import {ShaderPass} from '../../libs/three.js/postProcessing/ShaderPass.js'
+import {OrbitControls} from '../../libs/three.js/controls/OrbitControls.js'
 
 /**
  * Basic postprocessing using Threejs

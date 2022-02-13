@@ -1,35 +1,35 @@
-/**
- * @author alteredq / http://alteredqualia.com/
- */
+import {
+	Color
+} from '../three.module.js';
+import { Pass } from './Pass.js';
 
-THREE.RenderPass = function ( scene, camera, overrideMaterial, clearColor, clearAlpha ) {
+class RenderPass extends Pass {
 
-	THREE.Pass.call( this );
+	constructor( scene, camera, overrideMaterial, clearColor, clearAlpha ) {
 
-	this.scene = scene;
-	this.camera = camera;
+		super();
 
-	this.overrideMaterial = overrideMaterial;
+		this.scene = scene;
+		this.camera = camera;
 
-	this.clearColor = clearColor;
-	this.clearAlpha = ( clearAlpha !== undefined ) ? clearAlpha : 0;
+		this.overrideMaterial = overrideMaterial;
 
-	this.clear = true;
-	this.clearDepth = false;
-	this.needsSwap = false;
+		this.clearColor = clearColor;
+		this.clearAlpha = ( clearAlpha !== undefined ) ? clearAlpha : 0;
 
-};
+		this.clear = true;
+		this.clearDepth = false;
+		this.needsSwap = false;
+		this._oldClearColor = new Color();
 
-THREE.RenderPass.prototype = Object.assign( Object.create( THREE.Pass.prototype ), {
+	}
 
-	constructor: THREE.RenderPass,
+	render( renderer, writeBuffer, readBuffer /*, deltaTime, maskActive */ ) {
 
-	render: function ( renderer, writeBuffer, readBuffer /*, deltaTime, maskActive */ ) {
-
-		var oldAutoClear = renderer.autoClear;
+		const oldAutoClear = renderer.autoClear;
 		renderer.autoClear = false;
 
-		var oldClearColor, oldClearAlpha, oldOverrideMaterial;
+		let oldClearAlpha, oldOverrideMaterial;
 
 		if ( this.overrideMaterial !== undefined ) {
 
@@ -41,7 +41,7 @@ THREE.RenderPass.prototype = Object.assign( Object.create( THREE.Pass.prototype 
 
 		if ( this.clearColor ) {
 
-			oldClearColor = renderer.getClearColor().getHex();
+			renderer.getClearColor( this._oldClearColor );
 			oldClearAlpha = renderer.getClearAlpha();
 
 			renderer.setClearColor( this.clearColor, this.clearAlpha );
@@ -62,7 +62,7 @@ THREE.RenderPass.prototype = Object.assign( Object.create( THREE.Pass.prototype 
 
 		if ( this.clearColor ) {
 
-			renderer.setClearColor( oldClearColor, oldClearAlpha );
+			renderer.setClearColor( this._oldClearColor, oldClearAlpha );
 
 		}
 
@@ -76,4 +76,6 @@ THREE.RenderPass.prototype = Object.assign( Object.create( THREE.Pass.prototype 
 
 	}
 
-} );
+}
+
+export { RenderPass };

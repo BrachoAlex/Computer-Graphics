@@ -1,7 +1,9 @@
-import * as THREE from "../libs/three.js/r131/three.module.js"
+"use strict"; 
+
+import * as THREE from "../libs/three.js/three.module.js"
 import {addMouseHandler} from "./sceneHandlers.js"
 
-let renderer = null, scene = null, camera = null, cube = null, sphere = null, cone = null, sphereGroup = null;
+let renderer = null, scene = null, camera = null, cube = null, sphere = null, cone = null, sphereGroup = null, cubeGroup = null, coneGroup = null;
 
 const duration = 5000; // ms
 let currentTime = Date.now();
@@ -25,6 +27,7 @@ function animate()
     const angle = Math.PI * 2 * fract;
 
     // Rotate the cube about its Y axis
+    // cube.rotation.y += angle;
     cube.rotation.y += angle;
 
     // Rotate the sphere group about its Y axis
@@ -32,7 +35,7 @@ function animate()
     sphere.rotation.x += angle * 2;
 
     // Rotate the cone about its X axis (tumble forward)
-    cone.rotation.z += angle;
+    coneGroup.rotation.x += angle;
 }
 
 /**
@@ -68,12 +71,12 @@ function createScene(canvas)
     scene.background = new THREE.Color( 0.2, 0.2, 0.2 );
 
     // Add  a camera so we can view the scene
-    camera = new THREE.PerspectiveCamera( 45, canvas.width / canvas.height, 1, 4000 );
+    camera = new THREE.PerspectiveCamera( 45, canvas.width / canvas.height, 1, 20 );
     camera.position.z = 10;
     scene.add(camera);
 
     // Create a group to hold all the objects
-    const cubeGroup = new THREE.Object3D;
+    cubeGroup = new THREE.Object3D;
     
     // Add a directional light to show off the objects
     const light = new THREE.DirectionalLight( 0xffffff, 1.0);
@@ -107,6 +110,7 @@ function createScene(canvas)
 
     cubeGroup.position.set(1, 0, -0.5);
 
+    console.log("cube group position", cubeGroup.position);
     // Create a group for the sphere
     sphereGroup = new THREE.Object3D;
     cubeGroup.add(sphereGroup);
@@ -123,17 +127,20 @@ function createScene(canvas)
     // Add the sphere mesh to our group
     sphereGroup.add( sphere );
 
+    coneGroup = new THREE.Object3D();
+    sphereGroup.add(coneGroup);
     // Create the cone geometry
     geometry = new THREE.CylinderGeometry(0, .333, .444, 20, 20);
 
+    coneGroup.position.set(1, 1.222, -.667);
     // And put the geometry and material together into a mesh
     cone = new THREE.Mesh(geometry, material);
 
     // Move the cone up and out from the sphere
-    cone.position.set(1, 1, -.667);
+    cone.position.set(0, -0.222, 0);
         
     // Add the cone mesh to our group
-    sphereGroup.add( cone );
+    coneGroup.add( cone );
     
     // Now add the group to our scene
     scene.add( cubeGroup );

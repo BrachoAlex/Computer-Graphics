@@ -1,8 +1,10 @@
-import * as THREE from "../libs/three.js/r131/three.module.js"
+"use strict";
+
+import * as THREE from "../libs/three.js/three.module.js"
 
 let renderer = null, scene = null, camera = null, cube = null;
 
-let duration = 5000; // ms
+let duration = 10000; // ms
 let currentTime = Date.now();
 
 function main() 
@@ -77,6 +79,7 @@ function create_cube()
     const texture = new THREE.TextureLoader().load(textureUrl);
 
     // Now, create a Phong material to show shading; pass in the map. Color has to be passed in hexadecimal.
+    //const material = new THREE.MeshNormalMaterial();
     const material = new THREE.MeshPhongMaterial({ map: texture, color: 0xffffff});
     // let material = new THREE.MeshBasicMaterial({map:texture});
 
@@ -89,7 +92,7 @@ function create_cube()
     // Move the mesh back from the camera and tilt it toward the viewer
     cube.position.z = -8;
     cube.rotation.x = Math.PI / 5;
-    cube.rotation.y = Math.PI / 5;
+    cube.rotation.y = Math.PI / 3;
 
     // Finally, add the mesh to our scene
     scene.add( cube );

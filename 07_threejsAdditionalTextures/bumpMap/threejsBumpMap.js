@@ -1,6 +1,8 @@
 // Bump maps. 
 // A bump map is a bitmap used to displace the surface normal vectors of a mesh to create an apparently bumpy surface. The pixel values of the bitmap are treated as heights rather than color values. For example, a pixel value of zero can mean no displacement from the surface, and nonzero values can mean positive displacement away from the surface. Typically, single-channel black and white bitmaps are used.
-import * as THREE from "../../libs/three.js/r131/three.module.js";
+"use strict"; 
+
+import * as THREE from "../../libs/three.js/three.module.js";
 import {addMouseHandler} from './sceneHandler_bump.js';
 
 let renderer = null, scene = null, camera = null, root = null, group = null, sphere = null, sphereTextured = null;
@@ -36,7 +38,7 @@ function animate()
     let angle = Math.PI * 2 * fract;
 
     // Rotate the sphere group about its Y axis
-    group.rotation.y += angle;
+    //group.rotation.y += angle;
 }
 
 function update() 
@@ -120,7 +122,7 @@ function createScene(canvas)
 
     // Position the light out from the scene, pointing at the origin
     light.position.set(.5, 0, 1);
-    root.add( light );
+    scene.add( light );
 
     light = new THREE.AmbientLight ( 0x222222 );
     root.add(light);

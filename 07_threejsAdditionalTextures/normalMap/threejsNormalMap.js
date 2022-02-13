@@ -4,7 +4,9 @@
 // Specular maps.
 // Specular maps determine the intensity of specularity for each pixel. 
 
-import * as THREE from '../../libs/three.js/r131/three.module.js'
+"use strict"; 
+
+import * as THREE from '../../libs/three.js/three.module.js'
 import {addMouseHandler} from './sceneHandler_normalmap.js'
 
 let renderer = null, scene = null, camera = null, root = null, group = null, sphere = null, sphereNormalMapped = null;

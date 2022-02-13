@@ -3,10 +3,12 @@
 // Both the THREE.DirectionalLight type and the THREE.SpotLight type support shadows. 
 // 3. Indicate which geometry objects cast and receive shadows.
 
-import * as THREE from '../libs/three.js/r131/three.module.js'
-import { OrbitControls } from '../libs/three.js/r131/controls/OrbitControls.js';
-import { OBJLoader } from '../libs/three.js/r131/loaders/OBJLoader.js';
-import { MTLLoader } from '../libs/three.js/r131/loaders/MTLLoader.js';
+"use strict"; 
+
+import * as THREE from '../libs/three.js/three.module.js'
+import { OrbitControls } from '../libs/three.js/controls/OrbitControls.js';
+import { OBJLoader } from '../libs/three.js/loaders/OBJLoader.js';
+import { MTLLoader } from '../libs/three.js/loaders/MTLLoader.js';
 
 let renderer = null, scene = null, camera = null, group = null, objectList = [], orbitControls = null;
 
@@ -17,7 +19,7 @@ let directionalLight = null, spotLight = null, ambientLight = null;
 
 let mapUrl = "../images/checker_large.gif";
 
-let SHADOW_MAP_WIDTH = 4096, SHADOW_MAP_HEIGHT = 4096;
+let SHADOW_MAP_WIDTH = 1024, SHADOW_MAP_HEIGHT = 1024;
 
 let objMtlModelUrl = {obj:'../models/obj/Penguin_obj/penguin.obj', mtl:'../models/obj/Penguin_obj/penguin.mtl'};
 
@@ -54,10 +56,13 @@ async function loadJson(url, objectList)
         const object = await new THREE.ObjectLoader().loadAsync(url, onProgress, onError);
 
         object.castShadow = true;
-        object.receiveShadow = true;
+        object.receiveShadow = false;
+
         object.position.y = -1;
         object.position.x = 1.5;
+
         object.name = "jsonObject";
+
         objectList.push(object);
         scene.add(object);
     }
@@ -72,31 +77,34 @@ async function loadObj(objModelUrl, objectList)
     try
     {
         const object = await new OBJLoader().loadAsync(objModelUrl.obj, onProgress, onError);
+
         let texture = objModelUrl.hasOwnProperty('normalMap') ? new THREE.TextureLoader().load(objModelUrl.map) : null;
         let normalMap = objModelUrl.hasOwnProperty('normalMap') ? new THREE.TextureLoader().load(objModelUrl.normalMap) : null;
         let specularMap = objModelUrl.hasOwnProperty('specularMap') ? new THREE.TextureLoader().load(objModelUrl.specularMap) : null;
 
         console.log(object);
         
-        object.traverse(function (child) 
-        {
-            if (child.isMesh) {
+        // object.traverse(function (child) 
+        // {
+            for(const child of object.children)
+            {
+                //     if (child.isMesh)
                 child.castShadow = true;
                 child.receiveShadow = true;
                 child.material.map = texture;
                 child.material.normalMap = normalMap;
                 child.material.specularMap = specularMap;
             }
-        });
+        // });
 
         object.scale.set(3, 3, 3);
         object.position.z = -3;
         object.position.x = -1.5;
         object.rotation.y = -3;
         object.name = "objObject";
+        
         objectList.push(object);
         scene.add(object);
-
     }
     catch (err) 
     {
@@ -121,12 +129,15 @@ async function loadObjMtl(objModelUrl, objectList)
         const object = await objLoader.loadAsync(objModelUrl.obj, onProgress, onError);
     
         object.traverse(function (child) {
-            if (child.isMesh) {
+            if (child.isMesh)
+            {
                 child.castShadow = true;
                 child.receiveShadow = true;
             }
         });
         
+        console.log(object);
+
         object.position.y += 1;
         object.scale.set(0.15, 0.15, 0.15);
 
@@ -200,7 +211,7 @@ function createScene(canvas)
     renderer.shadowMap.enabled = true;
     
     // Options are THREE.BasicShadowMap, THREE.PCFShadowMap, PCFSoftShadowMap
-    renderer.shadowMap.type = THREE.BasicShadowMap;
+    renderer.shadowMap.type = THREE.PCFShadowMap;
     
     // Create a new Three.js scene
     scene = new THREE.Scene();

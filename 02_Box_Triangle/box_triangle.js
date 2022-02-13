@@ -1,4 +1,6 @@
-import * as shaderUtils from '../common/shaderUtils.js'
+"use strict";
+
+import * as shaderUtils from '../common/shaderUtils.js';
 const mat4 = glMatrix.mat4;
 
 // ModelView Matrix: defines where the square is positioned in the 3D coordinate system relative to the camera
