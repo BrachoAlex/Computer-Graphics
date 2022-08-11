@@ -160,6 +160,8 @@ function createCube(gl, translation, rotationAxis)
             vertexColors.push(...color);
     });
 
+    console.log(vertexColors);
+
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexColors), gl.STATIC_DRAW);
 
     // Index data (defines the triangles to be drawn).

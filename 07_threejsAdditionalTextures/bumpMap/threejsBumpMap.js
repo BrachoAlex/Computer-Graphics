@@ -38,7 +38,7 @@ function animate()
     let angle = Math.PI * 2 * fract;
 
     // Rotate the sphere group about its Y axis
-    //group.rotation.y += angle;
+    group.rotation.y += angle;
 }
 
 function update() 

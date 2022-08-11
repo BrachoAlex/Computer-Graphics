@@ -1,5 +1,5 @@
-import * as THREE from '/libs/three.js/three.module.js'
-import { OrbitControls } from '/libs/three.js/controls/OrbitControls.js';
+import * as THREE from '../libs/three.js/three.module.js'
+import { OrbitControls } from '../libs/three.js/controls/OrbitControls.js';
 
 class BaseScene
 {

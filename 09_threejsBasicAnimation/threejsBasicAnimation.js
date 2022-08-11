@@ -59,26 +59,28 @@ function initAnimations()
                 { 
                     keys:[0, .5, 1], 
                     values:[
-                            { x: 0, y : 0 },
+                            { x: 1, y : 0.5 },
                             { x: 1, y : 1 },
-                            { x: 0, y : 0 },
+                            { x: 1, y : 0.5 },
                             ],
-                    target:group.position
+                    target:group.scale
                 },
-                // { 
-                //     keys:[0, .5, 1], 
-                //     values:[
-                //             { y : 0 },
-                //             { y : Math.PI  },
-                //             { y : 0 },
-                //             ],
-                //     target:group.rotation
-                // },
                 { 
-                    keys:[0, 1], 
+                    keys:[0, .5, 1], 
+                    values:[
+                            { y : 0 },
+                            { y : Math.PI  },
+                            { y : 0 },
+                            ],
+                    target:group.rotation
+                },
+                { 
+                    keys:[0, 0.3, .6,  1], 
                     values:[
                             { r : 1, g: 0, b: 0},
+                            { r : 0, g: 0, b: 1},
                             { r : 0, g: 1, b: 0},
+                            { r : 1, g: 0, b: 0},
                             ],
                     target:cube.material.color
                 },

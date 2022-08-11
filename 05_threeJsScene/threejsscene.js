@@ -31,8 +31,8 @@ function animate()
     cube.rotation.y += angle;
 
     // Rotate the sphere group about its Y axis
-    sphereGroup.rotation.y -= angle / 2;
-    sphere.rotation.x += angle * 2;
+    sphereGroup.rotation.x -= angle / 2;
+    sphere.rotation.y += angle * 2;
 
     // Rotate the cone about its X axis (tumble forward)
     coneGroup.rotation.x += angle;
@@ -77,6 +77,8 @@ function createScene(canvas)
 
     // Create a group to hold all the objects
     cubeGroup = new THREE.Object3D;
+
+    console.log(cubeGroup.position);
     
     // Add a directional light to show off the objects
     const light = new THREE.DirectionalLight( 0xffffff, 1.0);
@@ -124,6 +126,8 @@ function createScene(canvas)
     // And put the geometry and material together into a mesh
     sphere = new THREE.Mesh(geometry, material);
 
+    // sphere.position.set(2, 1, 1);
+    console.log("sphere position", sphere.position);
     // Add the sphere mesh to our group
     sphereGroup.add( sphere );
 
@@ -132,12 +136,12 @@ function createScene(canvas)
     // Create the cone geometry
     geometry = new THREE.CylinderGeometry(0, .333, .444, 20, 20);
 
-    coneGroup.position.set(1, 1.222, -.667);
+    // coneGroup.position.set(1, 1.222, -.667);
     // And put the geometry and material together into a mesh
     cone = new THREE.Mesh(geometry, material);
 
     // Move the cone up and out from the sphere
-    cone.position.set(0, -0.222, 0);
+    cone.position.set(0, 2.222, 0);
         
     // Add the cone mesh to our group
     coneGroup.add( cone );
@@ -151,9 +155,9 @@ function createScene(canvas)
     // This code gets the world position of the cone.
     const coneWorldPosition = new THREE.Vector3();
 
-    cubeGroup.updateMatrixWorld();
-    sphereGroup.updateMatrixWorld();
-    cone.updateMatrixWorld();
+    // cubeGroup.updateMatrixWorld();
+    // sphereGroup.updateMatrixWorld();
+    // cone.updateMatrixWorld();
 
     console.log("Cone position:", cone.position);
     cone.getWorldPosition(coneWorldPosition);

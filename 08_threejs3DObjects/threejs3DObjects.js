@@ -19,7 +19,7 @@ let directionalLight = null, spotLight = null, ambientLight = null;
 
 let mapUrl = "../images/checker_large.gif";
 
-let SHADOW_MAP_WIDTH = 1024, SHADOW_MAP_HEIGHT = 1024;
+let SHADOW_MAP_WIDTH = 2048, SHADOW_MAP_HEIGHT = 2048;
 
 let objMtlModelUrl = {obj:'../models/obj/Penguin_obj/penguin.obj', mtl:'../models/obj/Penguin_obj/penguin.mtl'};
 

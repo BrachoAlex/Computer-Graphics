@@ -67,7 +67,7 @@ function scene_setup()
 
     // Add  a camera so we can view the scene. Three js uses these values to create a projection matrix.
     camera = new THREE.PerspectiveCamera( 45, canvas.width / canvas.height, 1, 40 );
-    // camera = new THREE.OrthographicCamera(-5, 5, 4, -4, 1, 40);
+    // camera = new THREE.OrthographicCamera(-10, 10, 10, -10, 1, 40);
     scene.add(camera);
 }
 

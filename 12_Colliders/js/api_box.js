@@ -66,8 +66,8 @@ function loadGame()
         let cubeBox = new THREE.Box3().setFromObject(this.cube);
         let knotBox = new THREE.Box3().setFromObject(this.knot);
     
-        this.sphere.material = sphereBox.intersectsBox(cubeBox) ? Game.materials.colliding : Game.materials.solid;
-        this.knot.material = knotBox.intersectsBox(cubeBox) ? Game.materials.colliding : Game.materials.solid;
+        this.sphere.material = cubeBox.intersectsBox(sphereBox) ? Game.materials.colliding : Game.materials.solid;
+        this.knot.material = cubeBox.intersectsBox(knotBox) ? Game.materials.colliding : Game.materials.solid;
     };
     
     game.toggleDebug = function () {

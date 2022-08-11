@@ -32,7 +32,7 @@ const fragmentShaderSource = `#version 300 es
 
         void main(void) {
         // Return the pixel color: always output white
-        fragColor = vec4(1.0, 1.0, 1.0, 1.0);
+        fragColor = vec4(1, 1, 1, 1.0);
     }`;
 
 function main() 
@@ -43,13 +43,13 @@ function main()
     // canvas.width = window.innerWidth;
     // canvas.height = window.innerHeight;
     const gl = initWebGL(canvas);
-    
+
     initViewport(gl, canvas);
     initMatrices(canvas);
+    
+    const triangle = createTriangle(gl);
 
     const shaderProgram = shaderUtils.initShader(gl, vertexShaderSource, fragmentShaderSource);
-
-    const triangle = createTriangle(gl, shaderProgram);
     
     bindShaderAttributes(gl, shaderProgram);
 
@@ -105,7 +105,8 @@ function initMatrices(canvas)
     // aspect	number	Aspect ratio. typically viewport width/height
     // near	    number	Near bound of the frustum
     // far	    number	Far bound of the frustum
-    mat4.perspective(projectionMatrix, Math.PI / 4, canvas.width / canvas.height, 1, 5);
+    mat4.perspective(projectionMatrix, Math.PI / 4, canvas.width / canvas.height, 1, 50);
+    // mat4.ortho(projectionMatrix, -1, 1, -1, 1, 1, 50);
 }
 
 // Create the vertex data for a Triangle to be drawn.
@@ -119,10 +120,10 @@ function createTriangle(gl)
     
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
 
-    let verts = [
+    let verts = [ 
         0.0,  0.5, 0.0,
         -.5, -.5,  0.0,
-        .5, -.5, 0.0,
+        .5, -.5, 0.0
     ];
 
     // void gl.bufferData(target, ArrayBufferView srcData, usage, srcOffset, length);
@@ -132,7 +133,7 @@ function createTriangle(gl)
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verts), gl.STATIC_DRAW);
 
     // The resulting object contains the vertexbuffer, the size of the vertex structure (3 floats, x, y, z), the number of vertices to be drawn, the the primitive to draw.
-    let triangle = {buffer:vertexBuffer, vertSize: 3, nVerts: 3, primtype:gl.TRIANGLE_STRIP};
+    let triangle = {buffer:vertexBuffer, vertSize: 3, nVerts: 6, primtype:gl.TRIANGLES};
     
     return triangle;
 }

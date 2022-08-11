@@ -16,6 +16,12 @@ let renderer = null, scene = null, camera = null, root = null, orbitControls = n
 let directionalLight = null, spotLight = null, ambientLight = null;
 let textureEncoding = 'sRGB';
 
+let currentTime = Date.now();
+let animation = '01_Run_Armature_0'
+let gltf_animations = {}
+
+let soldier = null, ship = null
+
 const mapUrl = "../../images/checker_large.gif";
 
 const objMtlModel = {
@@ -38,6 +44,24 @@ function onProgress( xhr ) {
 
         const percentComplete = xhr.loaded / xhr.total * 100;
         console.log( xhr.target.responseURL, Math.round( percentComplete, 2 ) + '% downloaded' );
+    }
+}
+
+function animate()
+{
+    const now = Date.now();
+    const deltat = now - currentTime;
+    currentTime = now;
+
+    if(gltf_animations[animation])
+    {
+        gltf_animations[animation].getMixer().update(deltat * 0.001);
+    }
+
+    if(soldier)
+    {
+        soldier.position.y = Math.sin(currentTime*0.005) *4
+        soldier.bbox.update()
     }
 }
 
@@ -138,16 +162,30 @@ async function loadGLTF(gltfModelUrl, configuration)
 
         const result = await gltfLoader.loadAsync(gltfModelUrl);
 
-        const object = result.scene || result.scenes[0];
+        const object = result.scenes[0].children[0];
 
-        console.log(object);
+        console.log(result)
+        console.log("object:", object);
 
+        result.animations.forEach(element => {
+            gltf_animations[element.name] = new THREE.AnimationMixer( scene ).clipAction(element, object);
+        });
+
+        object.bbox = new THREE.BoxHelper(object, 0x00ff00)
+        object.bbox.visible = true
+
+        scene.add(object.bbox)
+
+        // gltf_animations['01_Run_Armature_0'].play();
         setVectorValue(object.position, configuration, 'position', new THREE.Vector3(0,0,0));
         setVectorValue(object.scale, configuration, 'scale', new THREE.Vector3(1, 1, 1));
         setVectorValue(object.rotation, configuration, 'rotation', new THREE.Vector3(0,0,0));
         
+        object.bbox.update()
+        
         updateTextureEncoding(object); 
-        scene.add(object);      
+        scene.add(object);
+        return object
     }
     catch(err)
     {
@@ -186,6 +224,17 @@ function update()
 
     // Update the camera controller
     orbitControls.update();
+
+    if(soldier && ship)
+    {
+        const soldierBBox = new THREE.Box3().setFromObject(soldier)
+        const shipBBox = new THREE.Box3().setFromObject(ship)
+        if(soldierBBox.intersectsBox(shipBBox))
+            soldier.bbox.material.color = new THREE.Color('red')
+        else
+            soldier.bbox.material.color = new THREE.Color('green')
+    }
+    animate()
 }
 
 function createScene(canvas) 
@@ -248,15 +297,15 @@ function createScene(canvas)
     scene.add( root );
 }
 
-function loadObjects()
+async function loadObjects()
 {
     loadObj(objModel, {position: new THREE.Vector3(-8, 0, 0), scale: new THREE.Vector3(3, 3, 3), rotation: new THREE.Vector3(0, 1.58, 0) });
     
-    load3dModel(objMtlModel.obj, objMtlModel.mtl, {position: new THREE.Vector3(0, -3, 0), scale:new THREE.Vector3(0.25, 0.25, 0.25)});
+    load3dModel(objMtlModel.obj, objMtlModel.mtl, {position: new THREE.Vector3(7, 1, 0), scale:new THREE.Vector3(0.5, 0.5, 0.5)});
     
-    loadGLTF('../../models/gltf/SpaceShip/ship.glb', {position: new THREE.Vector3(-10, 10, 0), scale:new THREE.Vector3(1, 1, 1), rotation: new THREE.Vector3(0, 3.1415,0)  });
+    ship = await loadGLTF('../../models/gltf/SpaceShip/ship.glb', {position: new THREE.Vector3(-10, 10, 0), scale:new THREE.Vector3(1, 1, 1), rotation: new THREE.Vector3(Math.PI/2, Math.PI, 0)  });
 
-    loadGLTF('../../models/gltf/Soldier.glb', {position: new THREE.Vector3(10, -4, 0), scale:new THREE.Vector3(5, 5, 5), rotation: new THREE.Vector3(0, 3.1415,0)  });
+    soldier = await loadGLTF('../../models/gltf/Soldier.glb', {position: new THREE.Vector3(0, 0, 0), scale:new THREE.Vector3(0.05, 0.05, 0.05), rotation: new THREE.Vector3(Math.PI / 2, Math.PI, 0)  });
 
     loadFBX('../../models/fbx/Robot/robot_idle.fbx', {position: new THREE.Vector3(0, -4, -20), scale:new THREE.Vector3(0.05, 0.05, 0.05) })
 }

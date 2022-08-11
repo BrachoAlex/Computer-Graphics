@@ -63,7 +63,7 @@ function scene_setup()
     light.position.set(-2, -2, 2);
     light.target.position.set(0,0,0);
 
-    const light2 = new THREE.DirectionalLight(0xffffff, 0.5);
+    const light2 = new THREE.DirectionalLight(0xffffff, 1.0);
     light2.position.set(0, 5, 2);
     light2.target.position.set(0,0,0);
 
@@ -79,7 +79,7 @@ function create_cube()
     const texture = new THREE.TextureLoader().load(textureUrl);
 
     // Now, create a Phong material to show shading; pass in the map. Color has to be passed in hexadecimal.
-    //const material = new THREE.MeshNormalMaterial();
+    // const material = new THREE.MeshNormalMaterial();
     const material = new THREE.MeshPhongMaterial({ map: texture, color: 0xffffff});
     // let material = new THREE.MeshBasicMaterial({map:texture});
 
