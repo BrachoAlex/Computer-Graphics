@@ -32,11 +32,10 @@ const fragmentShaderSource = `#version 300 es
 
         void main(void) {
         // Return the pixel color: always output white
-        fragColor = vec4(1, 1, 1, 1.0);
+        fragColor = vec4(0.5, 0, 0.4, 1.0);
     }`;
 
-function main() 
-{
+function main() {
     const canvas = document.getElementById("webglcanvas");
 
     // Code to make the canvas full screen
@@ -46,19 +45,18 @@ function main()
 
     initViewport(gl, canvas);
     initMatrices(canvas);
-    
+
     const triangle = createTriangle(gl);
 
     const shaderProgram = shaderUtils.initShader(gl, vertexShaderSource, fragmentShaderSource);
-    
+
     bindShaderAttributes(gl, shaderProgram);
 
     draw(gl, shaderProgram, triangle);
 }
 
 // Initializes the context for use with WebGL
-function initWebGL(canvas) 
-{
+function initWebGL(canvas) {
 
     let gl = null;
     const msg = "Your browser does not support WebGL, or it is not enabled by default.";
@@ -67,27 +65,25 @@ function initWebGL(canvas)
         // The getContext method can take one of the following context id strings:
         // "2d" for a 2d canvas context, or "webgl2" for a WebGL context.
         gl = canvas.getContext("webgl2");
-    } 
-    catch (e){
+    }
+    catch (e) {
         msg = "Error creating WebGL Context!: " + e.toString();
     }
 
-    if (!gl){
+    if (!gl) {
         throw new Error(msg);
     }
 
-    return gl;        
+    return gl;
 }
 
 // The viewport is the rectangular bounds of where to draw. 
 // In this case, the viewport will take up the entire contents of the canvas' display area.
-function initViewport(gl, canvas)
-{
+function initViewport(gl, canvas) {
     gl.viewport(0, 0, canvas.width, canvas.height);
 }
 
-function initMatrices(canvas)
-{
+function initMatrices(canvas) {
     // Create a model view matrix with object at 0, 0, -3.333
     modelViewMatrix = mat4.create();
 
@@ -113,16 +109,18 @@ function initMatrices(canvas)
 // WebGL drawing is done with primitives — different types of objects to draw. WebGL primitive types include triangles, points, and lines. 
 // Triangles, the most commonly used primitive, are actually accessible in two different forms: as triangle sets (arrays of triangles) and triangle strips (described shortly). 
 // Primitives use arrays of data, called buffers, which define the positions of the vertices to be drawn.
-function createTriangle(gl) 
-{
+function createTriangle(gl) {
     let vertexBuffer;
     vertexBuffer = gl.createBuffer();
-    
+
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
 
-    let verts = [ 
-        0.0,  0.5, 0.0,
-        -.5, -.5,  0.0,
+    let verts = [
+        -0.5, 0.5, 0.0,
+        -.5, -.5, 0.0,
+        .5, -.5, 0.0,
+        0.5, 0.5, 0.0,
+        -.5, .5, 0.0,
         .5, -.5, 0.0
     ];
 
@@ -133,20 +131,19 @@ function createTriangle(gl)
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verts), gl.STATIC_DRAW);
 
     // The resulting object contains the vertexbuffer, the size of the vertex structure (3 floats, x, y, z), the number of vertices to be drawn, the the primitive to draw.
-    let triangle = {buffer:vertexBuffer, vertSize: 3, nVerts: 3, primtype:gl.TRIANGLES};
-    
+    let triangle = { buffer: vertexBuffer, vertSize: 3, nVerts: 6, primtype: gl.TRIANGLES };
+
     return triangle;
 }
 
-function bindShaderAttributes(gl, shaderProgram)
-{
+function bindShaderAttributes(gl, shaderProgram) {
     // Obtain handles to each of the variables defined in the GLSL shader code so that they can be initialized
     // gl.getAttribLocation(program, name);
     // program  A webgl program containing the attribute variable
     // name     A domString specifying the name of the attribute variable whose location to get
     shaderVertexPositionAttribute = gl.getAttribLocation(shaderProgram, "vertexPos");
     gl.enableVertexAttribArray(shaderVertexPositionAttribute);
-    
+
     // gl.getUniformLocation(program, name);
     // program  A webgl program containing the attribute variable
     // name     A domString specifying the name of the uniform variable whose location to get
@@ -154,8 +151,7 @@ function bindShaderAttributes(gl, shaderProgram)
     shaderModelViewMatrixUniform = gl.getUniformLocation(shaderProgram, "modelViewMatrix");
 }
 
-function draw(gl, shaderProgram, obj) 
-{
+function draw(gl, shaderProgram, obj) {
     // clear the background (with black)
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
