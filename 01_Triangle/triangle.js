@@ -122,8 +122,9 @@ function createTriangle(gl) {
         0.5, 0.5, 0.0,
         -.5, .5, 0.0,
         .5, -.5, 0.0
-    ];
-
+    ];//arreglo lineal. Este es un Buffer(espacio de memoría que conecta diferentes espacios de esta). Aquí están los vertices del triangulo. 
+    //cada cuantos flotantes va a tener un vertice y cuantos vertices va a tener mi figura. 
+    
     // void gl.bufferData(target, ArrayBufferView srcData, usage, srcOffset, length);
     // target = gl.ARRAY_BUFFER: Buffer containing vertex attributes, such as vertex coordinates, texture coordinate data, or vertex color data.
     // srcData = This is a new data type introduced into web browsers for use with WebGL. Float32Array is a type of ArrayBuffer, also known as a typed array. This is a JavaScript type that stores compact binary data. 
@@ -150,7 +151,7 @@ function bindShaderAttributes(gl, shaderProgram) {
     shaderProjectionMatrixUniform = gl.getUniformLocation(shaderProgram, "projectionMatrix");
     shaderModelViewMatrixUniform = gl.getUniformLocation(shaderProgram, "modelViewMatrix");
 }
-
+//programa que corre en la gpu que crea una imagen que se despliega en el canvas, 
 function draw(gl, shaderProgram, obj) {
     // clear the background (with black)
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -188,3 +189,10 @@ function draw(gl, shaderProgram, obj) {
 }
 
 main();
+
+//coordenadas
+//Iniciar contexto
+//iniciar el viewport
+//iniciar las matrices (una por cada objeto)
+//Circulo:
+//necesitamos el radio. 
